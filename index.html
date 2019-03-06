@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rock Paper Scissors</title>
+</head>
+<h1>To play:</h1>
+<ol>
+    <li>Open your browser's console (Ctrl + Shift + k)</li>
+    <li>Type in "game()" in the console (without the quotes</li>
+    <li>Enjoy!</li>
+</ol>
+<body>
+    <script>
+        // 0 = Rock, 1 = Paper, 2 = Scissor 
+        const actions = {
+            rock: 0,
+            paper: 1,
+            scissor: 2
+        }
+
+        let score = {
+            Player: 0,
+            Computer: 0
+        }
+        
+        function computerPlay() {
+            return Math.floor(Math.random() * 3)
+        }
+
+        function playerPlay() {
+            let play = "";
+            play = window.prompt("Rock, paper, or scissors?");
+            play.toLowerCase;
+            while (!(play in actions)) {
+                play = window.prompt("Invalid selection! Please choose: Rock, paper, or scissors");
+                play.toLowerCase();
+            }
+            
+            return actions[play]
+        }
+
+        const getActionName = (value) => 
+            Object.keys(actions).find(key => actions[key] === value);
+
+        function playRound() {
+            const cPlay = computerPlay();
+            const pPlay = playerPlay();
+            const result = pPlay - cPlay >= 0 ? pPlay - cPlay : pPlay - cPlay + 3;
+            let resultMsg = "Computer plays " + getActionName(cPlay) + "\n" + 
+                            "Player plays " + getActionName(pPlay) + "\n";
+            if (result == 0) {
+                resultMsg += "Tie! Nobody wins the round!";
+            } else if (result == 2) {
+                score.Computer += 1;
+                resultMsg += "Computer wins the round!";
+            } else {
+                score.Player += 1;
+                resultMsg += "Player wins the round!";
+            }
+            return resultMsg + "\n Player: " + score.Player + " | " + "Computer: " + score.Computer;                
+        }
+
+        function game() {
+            score.Player = 0;
+            score.Computer = 0;
+            for (let i = 1; i <=5; i++) {
+                console.log(playRound());
+            }
+            if (score.Player == score.Computer) {
+                console.log("Tie Game!");
+            } else {
+                let winner = score.Player > score.Computer ? "Player" : "Computer";
+                console.log(winner + " wins the game!")
+            }
+        }
+
+            
+    </script>
+</body>
+</html>>
+
