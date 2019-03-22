@@ -4,13 +4,15 @@
     <meta charset="utf-8">
     <title>Rock Paper Scissors</title>
 </head>
-<h1>To play:</h1>
-<ol>
-    <li>Open your browser's console (Ctrl + Shift + k)</li>
-    <li>Type in "game()" in the console (without the quotes</li>
-    <li>Enjoy!</li>
-</ol>
+<h1>Rock! Paper! Scissors!</h1>
 <body>
+    <button id="startbutton">Click here to start a new game!</button>
+    <button value="rock" class="selection">Rock!</button>
+    <button value="paper" class="selection">Paper!</button>
+    <button value="scissor" class="selection">Scissors!</button>
+    <div id="roundmessage"></div>
+    <div id="gamemessage"></div>
+
     <script>
         // 0 = Rock, 1 = Paper, 2 = Scissor 
         const actions = {
@@ -43,12 +45,12 @@
         const getActionName = (value) => 
             Object.keys(actions).find(key => actions[key] === value);
 
-        function playRound() {
+        function playRound(pValue) {
             const cPlay = computerPlay();
-            const pPlay = playerPlay();
+            const pPlay = actions[pValue];
             const result = pPlay - cPlay >= 0 ? pPlay - cPlay : pPlay - cPlay + 3;
-            let resultMsg = "Computer plays " + getActionName(cPlay) + "\n" + 
-                            "Player plays " + getActionName(pPlay) + "\n";
+            let resultMsg = "Computer plays " + getActionName(cPlay) + "<br>" + 
+                            "Player plays " + getActionName(pPlay) + "<br>";
             if (result == 0) {
                 resultMsg += "Tie! Nobody wins the round!";
             } else if (result == 2) {
@@ -58,25 +60,57 @@
                 score.Player += 1;
                 resultMsg += "Player wins the round!";
             }
-            return resultMsg + "\n Player: " + score.Player + " | " + "Computer: " + score.Computer;                
+            resultMsg += "<br> Player: " + score.Player + " | " + "Computer: " + score.Computer
+            let roundMsg = document.querySelector("div#roundmessage");
+            roundMsg.innerHTML = resultMsg;
+
+            // best out of 5 - check if game ends
+            if (score.Player + score.Computer == 5) {
+                const winner = score.Player > score.Computer ? "Player" : "Computer";
+                const gameMsg = document.querySelector("div#gamemessage");
+                gameMsg.textContent = winner + " has won the game!";
+                game();
+            }
         }
 
         function game() {
             score.Player = 0;
             score.Computer = 0;
-            for (let i = 1; i <=5; i++) {
-                console.log(playRound());
-            }
-            if (score.Player == score.Computer) {
-                console.log("Tie Game!");
-            } else {
-                let winner = score.Player > score.Computer ? "Player" : "Computer";
-                console.log(winner + " wins the game!")
-            }
+            toggleStartButton();
+            togglePlayerButtons();
         }
+
+        let selectionButtons = document.querySelectorAll("button.selection");
+        let startButton = document.querySelector("button#startbutton");
+
+        // hides/unhides player selection buttons
+        function togglePlayerButtons() {
+            selectionButtons.forEach(function(button) {
+                if (button.style.display == "none")
+                    button.style.display = "block";
+                else
+                    button.style.display = "none";
+            });
+        }
+
+        function toggleStartButton() {
+            if (startButton.style.display == "none")
+                startButton.style.display = "block";
+            else
+                startButton.style.display = "none";
+        }
+
+        startButton.addEventListener("click", game);
+        selectionButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                playRound(button.value);
+            });
+        });
+
+        togglePlayerButtons();
 
             
     </script>
 </body>
-</html>>
+</html>
 
